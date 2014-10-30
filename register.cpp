@@ -22,24 +22,26 @@ void Register :: initRegister(const char * file_name ){
 
 }
 
-void Register :: fill_Register(VectorRelacional<const char* ,  const char *>* campos){
+
+bool Register :: fill_Register(VectorRelacional<const char* ,  const char *>* campos){
     NodoRelacional<const char* ,  const char *>* temp;
     temp = campos->get_primerNodo();
     campos->get_ultimoNodo()->set_siguiente(NULL);
 
     for(int x = 0 ;  x < campos->getLength() && temp != NULL ; x++){
 
-
-
         int desplazamiento = 4;     //se cuentan los 4 bytes del puntero al anterior
-        Nodo<const char* ,  int , int >* temp_sch; //nodo temp del schema
+        Nodo3d<const char* ,  int , int >* temp_sch; //nodo temp del schema
         temp_sch = fileManager->getSchema().get_primerNodo();
         fileManager->getSchema().get_ultimoNodo()->set_siguiente(NULL);
+        int coincidencias=0;
 
         for(int i =0 ; (i < fileManager->getSchema().getLength()) && (temp_sch != NULL) ; i++){
 
 
-            if (*temp->get_elemento1() == *temp_sch->get_elemento1()){// si el nombre de la columna es el mismo
+            if (fileManager->compare_strings(temp->get_elemento1(),temp_sch->get_elemento1())){// si el nombre de la columna es el mismo
+                coincidencias+=1;
+
 
                 if(temp_sch->get_elemento2() == fileManager->STRING_ID){ //obtengo el tipo de dato
 
@@ -56,11 +58,10 @@ void Register :: fill_Register(VectorRelacional<const char* ,  const char *>* ca
 
                     temp_char[b] = '\0';
 
-                 //   cout<<"se guardo: " << temp_char << "  en el desplzamiento: " << desplazamiento <<endl;
+                      // cout<<"se guardo: " << temp_char << "  en el desplzamiento: " << desplazamiento <<endl;
+
                     break;
                     //
-
-
 
                 }
                 else if(temp_sch->get_elemento2() == fileManager->INT_ID){ //obtengo el tipo de dato
@@ -69,7 +70,10 @@ void Register :: fill_Register(VectorRelacional<const char* ,  const char *>* ca
 
                     *temp_int = atoi(temp->get_elemento2()); //obtengo el entero que quiero guardar
 
-                    //  cout<<"se guardo: " << *temp_int << "  en el desplzamiento: " << desplazamiento <<endl;
+
+                     // cout<<"se guardo: " << *temp_int << "  en el desplzamiento: " << desplazamiento <<endl;
+
+
                      break;
 
                 }
@@ -77,20 +81,30 @@ void Register :: fill_Register(VectorRelacional<const char* ,  const char *>* ca
                     float* temp_float = (float*)(Buffer + desplazamiento);
 
                     *temp_float = atof(temp->get_elemento2()); //obtengo el float que quiero guardar
-                    //cout<<"se guardo: " << *temp_float << "  en el desplzamiento: " << desplazamiento <<endl;
+                  //   cout<<"se guardo: " << *temp_float << "  en el desplzamiento: " << desplazamiento <<endl;
+
+
+
                     break;
                 }
             }
-            desplazamiento += temp_sch->get_elemento3();// obtengo el lugar exacto donde se debe guardar los datos
+            if(temp_sch->get_elemento2() == fileManager->STRING_ID){desplazamiento += temp_sch->get_elemento3();}
+            if(temp_sch->get_elemento2() == fileManager->INT_ID){desplazamiento += fileManager->BYTES_4;}
+            if(temp_sch->get_elemento2() == fileManager->FLOAT_ID){desplazamiento += fileManager->BYTES_4;}
+
 
             temp_sch = temp_sch->get_siguiente();
         }
+        if (coincidencias==0){
+            cout<<"Error 003 :El campo seleccionado no es válido"<<endl;
+            //return false;
+        }
 
         temp = temp->get_siguiente();
+
     }
 
-
-
+    return true;
 
 }
 

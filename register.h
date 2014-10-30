@@ -17,7 +17,7 @@ public:
     Register(FileManager* file_manager , const char * Directory );
 
     void initRegister(const char * file_name );
-    void fill_Register(VectorRelacional<const char* ,  const char *>* campos);
+    bool fill_Register(VectorRelacional<const char* ,  const char *>* campos);
 
 
     bool isDirty();

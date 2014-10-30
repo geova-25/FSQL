@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "schema.h"
+#include "vector3d.h"
 #include "vectorrelacional.h"
 
 using namespace std;
@@ -15,7 +15,8 @@ class FileManager
 {
 
     void * header_buffer = NULL;
-    void * fileBuffer = NULL;
+    char * fileBuffer =NULL;
+
 
     char* nameOfFile = NULL;
     int* sizeOfFile = NULL;
@@ -30,7 +31,7 @@ class FileManager
 
     const char* directory;
 
-    Schema<const char *, int, int > schema;
+    Vector3d<const char *, int, int > schema;
 
 public:
     const int INT_ID = 999;
@@ -49,11 +50,20 @@ public:
     void printHeader();
     void openFile();
     void addNewRegister(void*);
+    int* where(Vector3d<const char*,const char*,const char*>* , VectorRelacional<const char*,int>*);
+    bool cumpleCondicion(const char* ,const char* operador, const char*,void* temp_register);
+    void printFile();
+    void closeFile();
+    void saveFile();
+    void setCampo(const char* columna , const char* campo,int num_row);
+    void printSelect(const char* columna ,int num_row);
+    void delete_row(int);
 
     void initSchema();
     void loadSchema();
     void saveSchema();
-    Schema<const char *, int, int > getSchema();
+    void generate_binaryFile();
+    Vector3d<const char *, int, int > getSchema();
     void addStringToSchema(const char*, int);
     void addIntToSchema(const char*,int);
     void addFloatToSchema(const char*,int);
@@ -78,6 +88,8 @@ public:
     void setPtrToFirstRegisterFree(int);
     void setSizeOfRegister(int);
     void setNumberOfColumns(int);
+
+    bool compare_strings(const char* str1 , const char* str2);
 
 
 };

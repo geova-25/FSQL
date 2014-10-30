@@ -28,9 +28,6 @@ int main()
 
 
 
-
-
-
 /*
     //---------------------------parametros que ocupamos obtener automaticamente
     int Ncolumnas = 6; //ejemplo

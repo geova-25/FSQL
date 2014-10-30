@@ -27,8 +27,16 @@ public:
     FSQL_Manager();
 
     int logic();
-    int createTable(const char* filename, Schema<const char*, const char*,const char*>*  );
-    int insertInto(const char* filename, VectorRelacional<const char*, const char*>*  args  ) ;
+    bool createTable(const char* filename, Vector3d<const char*, const char*,const char*>*  );
+    bool insertInto(const char* filename, VectorRelacional<const char*, const char*>*  args  ) ;
+    bool update(const char* filename,  Vector3d<const char*, const char*,const char*>* , VectorRelacional<const char*,int>* operadores_logicos,
+                VectorRelacional<const char*,const char*>*);
+    bool Select(const char* filename,  Vector3d<const char*, const char*,const char*>* , VectorRelacional<const char*,int>*
+                , VectorRelacional<const char*,int>* operadores_logicos);
+    bool Select_asterisco(const char* filename);
+    bool DeleteFrom(const char* filename,  Vector3d<const char*, const char*,const char*>*condiciones
+                                    , VectorRelacional<const char*,int>* operadores_logicos);
+
 
 private:
     const char* directorioDe_fsql = "/home/sebastian/Escritorio/BaseDeDatos/";
